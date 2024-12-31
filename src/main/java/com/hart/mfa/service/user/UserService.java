@@ -6,6 +6,8 @@ import com.hart.mfa.model.User;
 import com.hart.mfa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public class UserService implements IUserService{
     @Override
     public User createUser(User user) {
         try {
+
             User newUser =  new User(
                     user.getFirstName(),
                     user.getLastName(),
@@ -33,21 +36,26 @@ public class UserService implements IUserService{
         }
     }
 
-
     @Override
     public User findByEmail(String email) {
-            return  userRepository.findByEmail(email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException("User not found"));
     }
-
 
     @Override
     public UserDto convertToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
 
+    //Get an Authenticated User
     @Override
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new CustomException("User not founds"));
+    public UserDetails getAuthenticatedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            return (UserDetails) principal;
+        }
+        return null;
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface IUserService {
     User createUser(User user);
-    User getUserById(Long userId);
     User findByEmail(String email);
     UserDto convertToDto(User user);
+    UserDetails getAuthenticatedUser();
 }

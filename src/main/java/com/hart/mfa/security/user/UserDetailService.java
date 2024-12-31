@@ -1,7 +1,8 @@
-package com.hart.mfa.service.user;
+package com.hart.mfa.security.user;
 
 import com.hart.mfa.exception.CustomException;
 import com.hart.mfa.model.User;
+import com.hart.mfa.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,15 +18,15 @@ public class UserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
             User user = userService.findByEmail(email);
-            if(user == null || user.getEmail() == null){
-                throw new UsernameNotFoundException("User not found!");
-            }
 
-            //Map fetched user to UserDetails
+            // Map fetched user to UserDetails
             return org.springframework.security.core.userdetails.User.builder()
-                    .username(user.getEmail()).password(user.getPassword()).build();
-        } catch (UsernameNotFoundException e) {
-            throw new UsernameNotFoundException("User not found!");
+                    .username(user.getEmail())
+                    .password(user.getPassword())
+                    .build();
+        } catch (CustomException e) {
+            throw new UsernameNotFoundException(e.getMessage(), e);
         }
     }
+
 }

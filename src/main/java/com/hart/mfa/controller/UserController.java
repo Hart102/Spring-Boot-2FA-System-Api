@@ -1,12 +1,23 @@
 package com.hart.mfa.controller;
 
+import com.hart.mfa.dto.UserDto;
+import com.hart.mfa.exception.CustomException;
+import com.hart.mfa.model.User;
 import com.hart.mfa.response.ApiResponse;
 import com.hart.mfa.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +26,27 @@ public class UserController {
 
     private final IUserService userService;
 
-    public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
-        return null;
+    @GetMapping("/user/profile")
+    public ResponseEntity<ApiResponse> getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new ApiResponse(false, "No authenticated user found. Please login and try again", null)
+            );
+        }
+
+        try {
+            String email = authentication.getName();
+            User user = userService.findByEmail(email);
+            UserDto userDto = userService.convertToDto(user);
+
+            return ResponseEntity.ok(new ApiResponse(true, "User found", userDto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ApiResponse(false, "Error fetching authenticated user", null)
+            );
+        }
     }
+
 }
