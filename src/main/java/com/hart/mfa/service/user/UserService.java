@@ -6,8 +6,6 @@ import com.hart.mfa.model.User;
 import com.hart.mfa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +17,17 @@ public class UserService implements IUserService{
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-
     @Override
     public User createUser(User user) {
         try {
+            //Check if email already exist
+            Boolean emailAlreadyExist = userRepository.existsByEmail(user.getEmail());
+            
+            if (emailAlreadyExist) {
+                throw new CustomException("Email: " + user.getEmail() + " already exist");
+            }
 
+            //If not register new user
             User newUser =  new User(
                     user.getFirstName(),
                     user.getLastName(),
@@ -46,16 +50,4 @@ public class UserService implements IUserService{
     public UserDto convertToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }
-
-    //Get an Authenticated User
-    @Override
-    public UserDetails getAuthenticatedUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            return (UserDetails) principal;
-        }
-        return null;
-    }
-
 }

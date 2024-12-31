@@ -2,13 +2,11 @@ package com.hart.mfa.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,9 +18,9 @@ public class JwtUtil {
 
     private final UserDetailsService userDetailsService;
 
-//    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final String SECRET_KEY = java.util.Base64.getEncoder()
         .encodeToString(new SecureRandom().generateSeed(32));
+
     private final Date expirationTime = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10);
 
 

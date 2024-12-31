@@ -1,7 +1,6 @@
 package com.hart.mfa.controller;
 
 import com.hart.mfa.dto.UserDto;
-import com.hart.mfa.exception.CustomException;
 import com.hart.mfa.model.User;
 import com.hart.mfa.response.ApiResponse;
 import com.hart.mfa.service.user.IUserService;
@@ -10,14 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequiredArgsConstructor

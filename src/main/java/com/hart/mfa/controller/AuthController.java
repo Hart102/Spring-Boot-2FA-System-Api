@@ -35,7 +35,6 @@ public class AuthController {
 
     private final IUserService userService;
     private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
 
@@ -44,7 +43,7 @@ public class AuthController {
         try {
             User user = userService.createUser(request);
             UserDto userDto = userService.convertToDto(user);
-            return ResponseEntity.ok(new ApiResponse(true, "Registration success", userDto));
+            return ResponseEntity.ok(new ApiResponse(true, "Registration successful", userDto));
         } catch (Exception e) {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(false, e.getMessage(), null));
         }

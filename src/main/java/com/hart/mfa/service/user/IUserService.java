@@ -8,5 +8,4 @@ public interface IUserService {
     User createUser(User user);
     User findByEmail(String email);
     UserDto convertToDto(User user);
-    UserDetails getAuthenticatedUser();
 }
