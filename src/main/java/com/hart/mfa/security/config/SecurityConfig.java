@@ -52,8 +52,8 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow public access to /register and /login
-                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
+                        // Allow public access to /register, /login and /confirm-otp
+                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/verify-otp").permitAll()
                         .anyRequest().permitAll()
                 );
         http.authenticationProvider(daoAuthenticationProvider());

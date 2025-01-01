@@ -3,11 +3,11 @@ package com.hart.mfa.security.jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,15 +18,15 @@ public class JwtUtil {
 
     private final UserDetailsService userDetailsService;
 
-    private static final String SECRET_KEY = java.util.Base64.getEncoder()
-        .encodeToString(new SecureRandom().generateSeed(32));
-
+    @Value("${auth.token.jwtSecret}")
+    private String SECRET_KEY;
     private final Date expirationTime = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10);
 
 
     //Create token with user email
-    public String generateToke(String email) {
+    public String generateToke(String email, int otp) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("otp", otp);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(email)

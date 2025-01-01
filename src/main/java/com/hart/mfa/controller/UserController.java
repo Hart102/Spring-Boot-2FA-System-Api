@@ -22,7 +22,7 @@ public class UserController {
     private final IUserService userService;
 
     @GetMapping("/user/profile")
-    public ResponseEntity<ApiResponse> getAuthenticatedUser() {
+    public ResponseEntity<ApiResponse> getProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {

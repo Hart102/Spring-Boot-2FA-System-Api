@@ -29,7 +29,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-
         try {
             String jwt = parseJwt(request);
             //If token is not empty and is validated:
