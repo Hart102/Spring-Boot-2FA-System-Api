@@ -1,2 +1,2 @@
 ### Api Doc:
-http://localhost:8080/swagger-ui/index.html
+https://springboot-two-way-authentication-sys.onrender.com/swagger-ui/index.html

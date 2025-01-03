@@ -88,8 +88,8 @@ public class SecurityConfig {
                                 )
                 )
                 .info(new Info()
-                        .title("Get User Profile")
+                        .title("Two Factor Authentication System (2FA) using Spring Boot")
                         .version("1.0")
-                        .description("Returns profile information of the currently authenticated user or error details."));
+                        .description(""));
     }
 }
