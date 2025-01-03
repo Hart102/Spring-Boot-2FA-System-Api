@@ -4,6 +4,8 @@ import com.hart.mfa.dto.UserDto;
 import com.hart.mfa.model.User;
 import com.hart.mfa.response.ApiResponse;
 import com.hart.mfa.service.user.IUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +23,23 @@ public class UserController {
 
     private final IUserService userService;
 
+    /**
+     * Fetches the profile of the currently authenticated user.
+     * @return ResponseEntity containing user profile information or error details.
+     */
+   @Operation(
+        summary = "Get User Profile",
+        description = "Fetch the profile of the current authenticated user.",
+        security = @SecurityRequirement(name = "bearer-key")
+   )
+
     @GetMapping("/user/profile")
     public ResponseEntity<ApiResponse> getProfile() {
+        // Get Jwt auth Object
+        // Check if user is authenticated
+        // If No return an Unauthorized message
+        // If yes find and return user using the email
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    new ApiResponse(false, "No authenticated user found. Please login and try again", null)
-            );
-        }
 
         try {
             String email = authentication.getName();
