@@ -1,4 +1,4 @@
-# Spring Boot API: User Authentication and Profile Management
+# Spring Boot API: Two Factor Authentication System.
 
 This Spring Boot API provides essential features for 
 user registration, user authentication, and 
